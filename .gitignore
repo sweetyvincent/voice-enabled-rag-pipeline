@@ -1,0 +1,23 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Environments
+.env
+venv/
+env/
+.venv/
+
+# Large generated data files (index build generates these on setup)
+data/*.index
+data/*.json
+data/*.jsonl
+!data/.gitkeep
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
