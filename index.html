@@ -3,436 +3,952 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Voice-Enabled RAG Pipeline — Hacker Goa House 2026</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <title>Voice-Enabled RAG System — Hacker Goa House 2026</title>
   <style>
-    :root {
-      --bg: #041411;
-      --panel: #07201b;
-      --line: rgba(63, 228, 214, 0.18);
-      --cyan: #3fe4d6;
-      --lime: #c7e75c;
-      --coral: #ff6b6b;
-      --yellow: #ffd45e;
-      --cream: #fff9e9;
-      --muted: #8fa99b;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 24px 16px;
-      background: var(--bg);
-      color: var(--cream);
-      font-family: 'Space Grotesk', system-ui, sans-serif;
-      min-height: 100vh;
-    }
-    #vr-root {
-      max-width: 860px;
-      margin: 0 auto;
-    }
-    .vr-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--line);
-    }
-    .vr-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      color: var(--yellow);
-      margin-bottom: 6px;
-    }
-    .vr-title {
-      font-size: 28px;
-      font-weight: 700;
-      margin: 0 0 6px;
-      background: linear-gradient(90deg, var(--cream), var(--cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .vr-sub {
-      font-size: 13px;
-      color: var(--muted);
-      margin: 0;
-    }
-    .vr-badge {
-      text-align: right;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      background: rgba(63, 228, 214, 0.06);
-      border: 1px solid var(--line);
-      padding: 8px 12px;
-      border-radius: 10px;
-    }
-    .vr-badge b { color: var(--cyan); }
-    .vr-input-box {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
-    }
-    .vr-input-row {
-      display: flex;
-      gap: 10px;
-    }
-    .vr-text-input {
-      flex: 1;
-      background: rgba(4, 20, 17, 0.8);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 12px 14px;
-      color: var(--cream);
-      font-family: inherit;
-      font-size: 14px;
-      outline: none;
-    }
-    .vr-text-input:focus { border-color: var(--cyan); }
-    .vr-btn {
-      border: none;
-      border-radius: 10px;
-      padding: 12px 18px;
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .vr-btn-ask { background: var(--cyan); color: #041411; }
-    .vr-btn-ask:hover { background: var(--lime); }
-    .vr-btn-mic { background: var(--coral); color: white; display: flex; align-items: center; justify-content: center; }
-    .vr-btn-mic.recording { animation: pulse 1s infinite alternate; }
-    @keyframes pulse { from { opacity: 0.6; } to { opacity: 1; } }
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
 
-    .vr-chips {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-    .vr-chip {
-      background: rgba(255, 243, 209, 0.05);
-      border: 1px solid var(--line);
-      color: var(--muted);
-      border-radius: 8px;
-      padding: 6px 10px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      cursor: pointer;
-    }
-    .vr-chip:hover { color: var(--cream); border-color: var(--cyan); }
+#vr-root{
+  --bg:#08251f;--bg2:#0d3028;--panel:#10382f;--panel2:#17453a;
+  --cream:#fff3d1;--muted:#a9c2b3;--line:rgba(255,243,209,.14);
+  --coral:#ff4f70;--pink:#ff2f76;--sun:#ffc94f;--cyan:#42e5dc;--lime:#b9dc52;
+  width:100%;max-width:1000px;margin:0 auto;padding:30px;
+  color:var(--cream);font-family:'DM Sans',sans-serif;box-sizing:border-box;
+  border:1px solid rgba(255,243,209,.13);border-radius:26px;overflow:hidden;position:relative;
+  background:
+    radial-gradient(circle at 8% 0%,rgba(66,229,220,.17),transparent 26%),
+    radial-gradient(circle at 96% 5%,rgba(255,79,112,.17),transparent 27%),
+    radial-gradient(circle at 55% 110%,rgba(255,201,79,.12),transparent 35%),
+    linear-gradient(145deg,var(--bg),#071b18 55%,#0b2923);
+  box-shadow:0 28px 90px rgba(0,0,0,.38);
+}
+#vr-root:before{
+  content:"GOA • BUILD • SHIP • REPEAT";
+  position:absolute;right:-55px;bottom:75px;transform:rotate(-90deg);
+  font:700 10px 'JetBrains Mono';letter-spacing:.18em;color:rgba(255,243,209,.13);
+  pointer-events:none;
+}
+#vr-root:after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.16;
+  background-image:radial-gradient(rgba(255,243,209,.45) .6px,transparent .6px);
+  background-size:23px 23px;
+}
+#vr-root *{box-sizing:border-box}
 
-    .vr-results { display: flex; flex-direction: column; gap: 16px; }
-    .vr-card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 18px;
-    }
-    .vr-card-title {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      color: var(--yellow);
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .vr-answer { font-size: 15px; line-height: 1.6; margin-bottom: 14px; }
-    .vr-verdict {
-      display: inline-block;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-weight: 600;
-    }
-    .vr-verdict.pass { background: rgba(199, 231, 92, 0.2); color: var(--lime); }
-    .vr-verdict.refuse { background: rgba(255, 107, 107, 0.2); color: var(--coral); }
-    
-    .vr-timing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 8px;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px dashed var(--line);
-    }
-    .vr-timing-item {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--muted);
-    }
-    .vr-timing-item b { color: var(--cyan); display: block; font-size: 12px; margin-top: 2px; }
+.vr-header{
+  position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-start;
+  gap:24px;padding-bottom:24px;margin-bottom:24px;border-bottom:1px solid var(--line);
+}
+.vr-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:10px;
+  font:600 10px 'JetBrains Mono';letter-spacing:.15em;text-transform:uppercase;color:var(--sun);
+}
+.vr-eyebrow:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--coral);box-shadow:0 0 14px var(--coral)}
+.vr-title{
+  font:700 clamp(30px,5vw,44px) 'Space Grotesk';line-height:.95;letter-spacing:-.05em;margin:0;
+  text-transform:uppercase;
+}
+.vr-title:after{
+  content:"";display:block;width:105px;height:7px;margin-top:14px;
+  background:var(--coral);clip-path:polygon(0 30%,100% 0,93% 70%,8% 100%);transform:rotate(-1deg);
+}
+.vr-sub{color:var(--muted);font-size:13px;line-height:1.65;max-width:600px;margin:13px 0 0}
+.vr-corpus-badge{
+  min-width:160px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;
+  background:rgba(255,243,209,.045);color:var(--muted);font:10px/1.8 'JetBrains Mono';
+  text-align:right;box-shadow:inset 0 1px rgba(255,255,255,.04)
+}
+.vr-corpus-badge b{color:var(--cyan)}
 
-    .vr-chunk {
-      background: rgba(4, 20, 17, 0.5);
-      border: 1px solid rgba(63, 228, 214, 0.1);
-      border-radius: 8px;
-      padding: 10px;
-      margin-top: 8px;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    .vr-chunk-meta {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--yellow);
-      margin-bottom: 4px;
-    }
-  </style>
+.vr-input-row{position:relative;z-index:1;display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:10px;margin-bottom:10px}
+.vr-mic{
+  width:56px;height:56px;border-radius:17px;border:1px solid var(--line);background:var(--panel2);
+  color:var(--cream);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s
+}
+.vr-mic:hover{border-color:var(--cyan);background:rgba(66,229,220,.11);transform:translateY(-2px)}
+.vr-mic.listening{border-color:var(--sun);background:rgba(255,201,79,.12);animation:vr-pulse 1.4s infinite}
+@keyframes vr-pulse{0%{box-shadow:0 0 0 0 rgba(255,201,79,.45)}100%{box-shadow:0 0 0 15px rgba(255,201,79,0)}}
+.vr-mic svg{width:21px;height:21px}
+.vr-text-input{
+  height:56px;width:100%;border:1px solid var(--line);border-radius:15px;
+  background:#09241f;color:var(--cream);padding:0 17px;outline:none;font:14px 'DM Sans';transition:.2s
+}
+.vr-text-input::placeholder{color:#78988a}
+.vr-text-input:focus{border-color:var(--cyan);box-shadow:0 0 0 4px rgba(66,229,220,.09)}
+.vr-ask-btn{
+  height:56px;padding:0 23px;border:0;border-radius:15px;cursor:pointer;
+  color:#1b1000;background:linear-gradient(135deg,var(--sun),#ffab39);
+  font:700 12px 'JetBrains Mono';letter-spacing:.06em;transition:.2s;
+  box-shadow:0 12px 28px rgba(255,201,79,.15)
+}
+.vr-ask-btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
+.vr-ask-btn:disabled{opacity:.4;cursor:default}
+.vr-mic-hint{position:relative;z-index:1;color:#7fa496;font:10px/1.5 'JetBrains Mono';margin:0 0 18px 2px}
+
+.vr-examples{position:relative;z-index:1;display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
+.vr-ex-chip{
+  color:var(--muted);border:1px solid var(--line);background:rgba(255,243,209,.035);
+  border-radius:999px;padding:7px 11px;cursor:pointer;font:10px 'JetBrains Mono';transition:.18s
+}
+.vr-ex-chip:hover{color:var(--cream);border-color:var(--cyan);background:rgba(66,229,220,.08)}
+
+.vr-trace{
+  position:relative;z-index:1;display:flex;flex-direction:column;margin-bottom:14px;
+  border:1px solid var(--line);border-radius:17px;overflow:hidden;background:rgba(4,18,15,.45)
+}
+.vr-stage{
+  display:flex;align-items:center;gap:12px;min-height:48px;padding:10px 15px;
+  border-bottom:1px solid var(--line);background:rgba(255,243,209,.018)
+}
+.vr-stage:last-child{border-bottom:0}
+.vr-dot{width:8px;height:8px;border-radius:50%;background:#486157;flex:none}
+.vr-dot.active{background:var(--sun);box-shadow:0 0 0 5px rgba(255,201,79,.11),0 0 16px rgba(255,201,79,.35)}
+.vr-dot.pass{background:var(--lime);box-shadow:0 0 0 4px rgba(185,220,82,.10)}
+.vr-dot.fail{background:var(--coral);box-shadow:0 0 0 4px rgba(255,79,112,.10)}
+.vr-stage-label{flex:1;color:var(--cream);font:11px 'JetBrains Mono'}
+.vr-stage-label.dim{color:#648177}
+.vr-stage-ms{color:#7f9a8d;font:10px 'JetBrains Mono'}
+
+.vr-panel{
+  position:relative;z-index:1;background:linear-gradient(145deg,rgba(255,243,209,.055),rgba(255,243,209,.018));
+  border:1px solid var(--line);border-radius:17px;padding:18px;margin-bottom:12px;
+  box-shadow:0 14px 30px rgba(0,0,0,.12)
+}
+.vr-panel:before{
+  content:"";position:absolute;left:0;top:15px;width:3px;height:28px;border-radius:0 4px 4px 0;background:var(--cyan)
+}
+.vr-panel-label{color:#8fa99b;margin-bottom:11px;font:600 9px 'JetBrains Mono';letter-spacing:.15em;text-transform:uppercase}
+.vr-transcript{font-size:14px;line-height:1.65;color:var(--cream);padding-left:13px}
+.vr-chunk{border-left:2px solid rgba(66,229,220,.45);padding:9px 0 9px 13px;margin-bottom:8px;color:var(--muted);font-size:12px;line-height:1.6}
+.vr-chunk:last-child{margin-bottom:0}
+.vr-chunk b{color:var(--cream);font:600 10px 'JetBrains Mono'}
+.vr-chunk .vr-score{color:var(--cyan);font:10px 'JetBrains Mono'}
+.vr-verdict{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:6px 10px;margin-bottom:12px;font:600 10px 'JetBrains Mono'}
+.vr-verdict.ok{color:var(--lime);background:rgba(185,220,82,.08);border:1px solid rgba(185,220,82,.25)}
+.vr-verdict.refuse{color:#ff8a9a;background:rgba(255,79,112,.08);border:1px solid rgba(255,79,112,.25)}
+.vr-answer{color:var(--cream);font-size:15px;line-height:1.72}
+.vr-refuse-reason{color:var(--muted);font-size:12.5px;line-height:1.65}
+.vr-latency-strip{display:flex;gap:18px;flex-wrap:wrap;padding-top:12px;margin-top:12px;border-top:1px solid var(--line);color:#7f9a8d;font:10px 'JetBrains Mono'}
+.vr-latency-strip b{color:var(--cyan)}
+.vr-empty{
+  position:relative;z-index:1;text-align:center;padding:38px 15px;border:1px dashed var(--line);
+  border-radius:17px;color:#78958a;background:rgba(255,243,209,.018);font:11px 'JetBrains Mono'
+}
+
+@media(max-width:700px){
+  #vr-root{padding:20px 15px;border-radius:20px}
+  .vr-header{flex-direction:column;gap:15px;padding-bottom:19px;margin-bottom:19px}
+  .vr-corpus-badge{width:100%;text-align:left}
+  .vr-input-row{grid-template-columns:50px minmax(0,1fr)}
+  .vr-mic{width:50px;height:50px}
+  .vr-text-input{height:50px}
+  .vr-ask-btn{grid-column:1/-1;width:100%;height:49px}
+}
+@media(max-width:430px){
+  #vr-root{padding:17px 12px}
+  .vr-title{font-size:29px}
+  .vr-sub{font-size:12px}
+  .vr-panel{padding:15px}
+}
+
+
+/* =========================================================
+   HACKER GOA HOUSE 2026 — visual identity layer
+   ========================================================= */
+#vr-root{
+  --paper:#fff1cc;
+  --ink:#101b16;
+  --forest:#0a2b24;
+  --forest2:#123c30;
+  --leaf:#2f7250;
+  --coral:#ff4d70;
+  --hotpink:#f52f73;
+  --yellow:#ffd15c;
+  --cyan:#3fe4d6;
+  --sky:#83d9df;
+  --cream:#fff4d8;
+  --muted:#a8c0af;
+  --line:rgba(255,241,204,.15);
+  position:relative;
+  isolation:isolate;
+  background:
+    radial-gradient(circle at 82% 0%,rgba(255,77,112,.23),transparent 24%),
+    radial-gradient(circle at 12% 5%,rgba(63,228,214,.18),transparent 23%),
+    radial-gradient(circle at 52% 100%,rgba(255,209,92,.13),transparent 28%),
+    linear-gradient(145deg,#08251f 0%,#0b3027 52%,#061b17 100%);
+}
+
+/* torn poster / paper treatment */
+#vr-root .vr-header{
+  min-height:250px;
+  padding:25px 24px 22px;
+  margin:-30px -30px 24px;
+  border-bottom:0;
+  background:
+    linear-gradient(165deg,rgba(255,241,204,.97),rgba(255,232,190,.98) 58%,rgba(255,205,152,.96));
+  color:var(--ink);
+  clip-path:polygon(0 0,100% 0,100% 96%,94% 99%,87% 97%,80% 100%,70% 97%,62% 100%,51% 97%,42% 100%,32% 97%,22% 100%,12% 97%,0 100%);
+  overflow:hidden;
+}
+
+#vr-root .vr-header:before{
+  content:"";
+  position:absolute;inset:0;pointer-events:none;opacity:.32;
+  background:
+    radial-gradient(circle at 10% 22%,rgba(16,27,22,.09) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 65% 42%,rgba(16,27,22,.08) 0 1px,transparent 1.5px);
+  background-size:19px 19px,27px 27px;
+}
+
+#vr-root .vr-brand-block{position:relative;z-index:2;max-width:720px}
+#vr-root .vr-eyebrow{
+  color:var(--hotpink);
+  font:700 10px 'JetBrains Mono';
+  letter-spacing:.18em;
+  margin-bottom:11px;
+}
+#vr-root .vr-eyebrow:before{
+  background:var(--hotpink);
+  box-shadow:0 0 14px rgba(245,47,115,.35);
+}
+
+#vr-root .vr-brand-title{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  width:max-content;
+  line-height:.78;
+  letter-spacing:-.07em;
+  text-transform:uppercase;
+  transform:rotate(-1deg);
+}
+#vr-root .vr-brand-title span{display:block}
+#vr-root .vr-hacker,
+#vr-root .vr-house{
+  color:#111713;
+  font:900 clamp(37px,7vw,68px)/.76 'Impact','Arial Black','Space Grotesk',sans-serif;
+  text-shadow:1px 2px 0 rgba(16,27,22,.08);
+}
+#vr-root .vr-hacker{
+  letter-spacing:-.045em;
+  transform:skew(-5deg) rotate(-1deg);
+}
+#vr-root .vr-goa{
+  color:var(--coral);
+  font:900 clamp(50px,9vw,88px)/.75 'Impact','Arial Black','Space Grotesk',sans-serif;
+  letter-spacing:-.055em;
+  margin-left:30px;
+  transform:skew(-7deg) rotate(1deg);
+  text-shadow:2px 3px 0 rgba(245,47,115,.12);
+}
+#vr-root .vr-house{margin-left:4px}
+#vr-root .vr-house small{
+  display:inline-block;
+  margin-left:10px;
+  vertical-align:top;
+  color:#111713;
+  background:var(--yellow);
+  border:2px solid #111713;
+  border-radius:5px;
+  padding:5px 7px 4px;
+  font:900 12px 'JetBrains Mono';
+  letter-spacing:.03em;
+  transform:rotate(4deg);
+}
+
+#vr-root .vr-goa-scene{
+  position:absolute;
+  left:58%;
+  top:16px;
+  width:330px;
+  height:150px;
+  pointer-events:none;
+  font-family:Arial,sans-serif;
+}
+#vr-root .vr-palm{
+  position:absolute;right:24px;top:-8px;font-size:64px;
+  filter:saturate(.8);
+  transform:rotate(-8deg);
+}
+#vr-root .vr-sun{
+  position:absolute;right:92px;top:22px;color:#ffad45;font-size:45px;
+  filter:drop-shadow(0 3px 0 rgba(245,47,115,.12));
+}
+#vr-root .vr-wave{
+  position:absolute;right:0;bottom:30px;color:#31aeb1;font-size:25px;letter-spacing:-7px;
+}
+#vr-root .vr-surf{position:absolute;right:115px;bottom:10px;font-size:29px;transform:rotate(-8deg)}
+#vr-root .vr-scooter{position:absolute;right:12px;bottom:3px;font-size:24px}
+#vr-root .vr-cassette{position:absolute;left:8px;top:7px;color:#111713;background:#ffcf59;border:2px solid #111713;
+  padding:5px 8px;border-radius:5px;font:700 11px 'JetBrains Mono';transform:rotate(-8deg)}
+#vr-root .vr-code{position:absolute;left:8px;bottom:14px;color:#111713;background:#74ded4;border:2px solid #111713;
+  padding:5px 8px;border-radius:5px;font:700 11px 'JetBrains Mono';transform:rotate(5deg)}
+
+#vr-root .vr-sub{
+  color:#30443a;
+  max-width:570px;
+  margin:18px 0 10px;
+  font-size:13px;
+  font-weight:600;
+}
+#vr-root .vr-tagline{
+  display:flex;align-items:center;gap:8px;
+  color:#111713;font:800 9px 'JetBrains Mono';letter-spacing:.11em;
+}
+#vr-root .vr-tagline i{font-style:normal;color:var(--hotpink)}
+
+#vr-root .vr-corpus-badge{
+  position:relative;z-index:3;
+  color:#41534a;
+  background:rgba(255,255,255,.32);
+  border:2px solid rgba(16,27,22,.13);
+  box-shadow:4px 5px 0 rgba(16,27,22,.10);
+}
+#vr-root .vr-corpus-badge strong{color:var(--hotpink);font:800 10px 'JetBrains Mono'}
+#vr-root .vr-corpus-badge b{color:#0a746d}
+
+#vr-root .vr-input-row{
+  padding:14px;
+  border:1px solid rgba(255,241,204,.16);
+  border-radius:19px;
+  background:linear-gradient(135deg,rgba(255,241,204,.06),rgba(255,241,204,.025));
+  box-shadow:0 18px 35px rgba(0,0,0,.13);
+}
+#vr-root .vr-mic{
+  border:2px solid var(--yellow);
+  background:var(--coral);
+  color:#fff9e9;
+  box-shadow:4px 4px 0 rgba(255,209,92,.22);
+}
+#vr-root .vr-mic:hover{border-color:#fff1cc;background:var(--hotpink)}
+#vr-root .vr-text-input{
+  background:#09251f;
+  border-color:rgba(255,241,204,.2);
+}
+#vr-root .vr-ask-btn{
+  background:var(--hotpink);
+  color:white;
+  border:2px solid #111713;
+  box-shadow:4px 4px 0 var(--yellow);
+  font-family:'JetBrains Mono';
+}
+#vr-root .vr-ask-btn:hover{background:var(--coral);filter:none;transform:translate(-1px,-1px)}
+
+#vr-root .vr-ex-chip{
+  border-radius:5px;
+  background:#ffd45e;
+  color:#18231c;
+  border:2px solid #17211b;
+  box-shadow:2px 2px 0 rgba(0,0,0,.16);
+}
+#vr-root .vr-ex-chip:nth-child(2n){transform:rotate(-1deg)}
+#vr-root .vr-ex-chip:nth-child(3n){background:#72d9d1;transform:rotate(1deg)}
+#vr-root .vr-ex-chip:hover{background:#fff1cc;color:#111713;border-color:#111713}
+
+#vr-root .vr-toolbar{
+  background:rgba(255,241,204,.05);
+}
+#vr-root .vr-mode-btn.active{
+  background:var(--coral);
+  border-color:var(--coral);
+  color:white;
+}
+#vr-root .vr-tool-btn:hover,.vr-mode-btn:hover{background:rgba(63,228,214,.08)}
+
+#vr-root .vr-panel{
+  border-radius:12px 16px 12px 15px;
+  background:linear-gradient(145deg,rgba(255,241,204,.06),rgba(255,241,204,.018));
+}
+#vr-root .vr-panel:nth-child(odd){transform:rotate(.08deg)}
+#vr-root .vr-panel:before{background:var(--coral);width:4px}
+#vr-root .vr-panel-label{color:var(--yellow)}
+#vr-root .vr-score-card{border-radius:8px;background:rgba(255,241,204,.035)}
+#vr-root .vr-score-bar i{background:linear-gradient(90deg,var(--coral),var(--yellow),var(--cyan))}
+#vr-root .vr-verdict.ok{color:#c7e75c}
+#vr-root .vr-latency-strip b{color:var(--cyan)}
+
+#vr-root .vr-trace{
+  border-radius:12px;
+  background:rgba(2,16,13,.52);
+}
+#vr-root .vr-stage:nth-child(3) .vr-stage-label:after{
+  content:"  •  GOA HOUSE NODE";
+  color:var(--coral);
+  font-size:8px;
+}
+#vr-root .vr-empty{
+  background:linear-gradient(145deg,rgba(255,241,204,.045),rgba(255,241,204,.015));
+  border-color:rgba(255,241,204,.2);
+}
+
+
+.vr-refusal-card{
+  border-color:rgba(255,77,112,.24)!important;
+  background:linear-gradient(145deg,rgba(255,77,112,.07),rgba(255,241,204,.018))!important;
+}
+.vr-refusal-title{
+  color:var(--cream);font:700 20px 'Space Grotesk';letter-spacing:-.02em;margin:0 0 7px;
+}
+.vr-refusal-hint{
+  margin-top:13px;padding:10px 12px;border-radius:9px;
+  background:rgba(63,228,214,.06);border:1px solid rgba(63,228,214,.16);
+  color:#9cc7bb;font:10px/1.6 'JetBrains Mono';
+}
+
+.vr-footnote{margin:8px 4px 14px;color:#8fa99b;font:9px/1.6 'JetBrains Mono';}
+/* --- Goa product controls --- */
+.vr-toolbar{
+  position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;
+  gap:12px;flex-wrap:wrap;margin:0 0 18px;padding:10px;
+  border:1px solid var(--line);border-radius:15px;background:rgba(255,243,209,.035);
+}
+.vr-mode,.vr-toolbar-actions{display:flex;align-items:center;gap:6px}
+.vr-mode-label{font:600 9px 'JetBrains Mono';letter-spacing:.13em;color:#78958a;margin:0 5px}
+.vr-mode-btn,.vr-tool-btn{
+  border:1px solid var(--line);background:rgba(255,243,209,.035);color:var(--muted);
+  border-radius:9px;padding:7px 10px;cursor:pointer;font:10px 'JetBrains Mono';transition:.18s
+}
+.vr-mode-btn:hover,.vr-tool-btn:hover{color:var(--cream);border-color:var(--cyan)}
+.vr-mode-btn.active{color:#06221d;background:var(--cyan);border-color:var(--cyan);font-weight:700}
+.vr-tool-btn:disabled{opacity:.35;cursor:not-allowed}
+.vr-wave{
+  height:28px;display:flex;align-items:center;gap:3px;margin:12px 0 3px;padding:0 2px
+}
+.vr-wave i{display:block;width:3px;height:5px;border-radius:3px;background:var(--cyan);opacity:.45}
+.vr-wave.live i{animation:vr-wave .8s ease-in-out infinite alternate}
+.vr-wave i:nth-child(2){animation-delay:.08s}.vr-wave i:nth-child(3){animation-delay:.16s}
+.vr-wave i:nth-child(4){animation-delay:.24s}.vr-wave i:nth-child(5){animation-delay:.32s}
+.vr-wave i:nth-child(6){animation-delay:.40s}.vr-wave i:nth-child(7){animation-delay:.48s}
+@keyframes vr-wave{from{height:4px;opacity:.35}to{height:24px;opacity:1}}
+.vr-score-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:13px
+}
+.vr-score-card{
+  padding:11px;border:1px solid var(--line);border-radius:12px;background:rgba(255,243,209,.025)
+}
+.vr-score-card span{display:block;color:#7f9a8d;font:9px 'JetBrains Mono';text-transform:uppercase;letter-spacing:.08em}
+.vr-score-card b{display:block;margin-top:5px;color:var(--cyan);font:700 16px 'Space Grotesk'}
+.vr-score-bar{height:4px;margin-top:7px;border-radius:4px;background:#18352d;overflow:hidden}
+.vr-score-bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--cyan),var(--lime))}
+.vr-source-toggle{
+  margin-top:12px;border:0;background:none;color:var(--sun);cursor:pointer;
+  font:600 10px 'JetBrains Mono';padding:0
+}
+.vr-history{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.vr-history-item{
+  display:flex;justify-content:space-between;gap:10px;padding:10px 12px;
+  border:1px solid var(--line);border-radius:11px;background:rgba(255,243,209,.025);
+  cursor:pointer;color:var(--muted);font-size:11px
+}
+.vr-history-item:hover{border-color:var(--cyan);color:var(--cream)}
+.vr-history-item small{font:9px 'JetBrains Mono';color:#668178}
+@media(max-width:700px){
+  .vr-toolbar{align-items:stretch}
+  .vr-mode,.vr-toolbar-actions{width:100%}
+  .vr-mode-btn{flex:1}.vr-tool-btn{flex:1}
+}
+@media(max-width:430px){.vr-score-grid{grid-template-columns:1fr}}
+
+</style>
 </head>
 <body>
-  <div id="vr-root">
-    <div class="vr-header">
-      <div>
-        <div class="vr-eyebrow">HH GOA 2026 &middot; RAG PIPELINE LAB</div>
-        <h1 class="vr-title">Voice-Enabled RAG System</h1>
-        <p class="vr-sub">MSMARCO-XI dataset &middot; FAISS Vector Search &middot; Multi-Guardrails &middot; Sub-200ms Latency</p>
-      </div>
-      <div class="vr-badge">
-        TARGET: <b>&lt; 200ms</b><br>
-        ACHIEVED: <b id="vr-achieved">0.5ms</b>
-      </div>
-    </div>
 
-    <div class="vr-input-box">
-      <div class="vr-input-row">
-        <button class="vr-btn vr-btn-mic" id="vr-mic-btn" title="Speak via browser microphone">🎤 MIC</button>
-        <input type="text" class="vr-text-input" id="vr-text-input" placeholder="Type your question (e.g. What is retrieval-augmented generation?)...">
-        <button class="vr-btn vr-btn-ask" id="vr-ask-btn">ASK RAG</button>
+<div id="vr-root">
+  <div class="vr-header">
+    <div class="vr-brand-block">
+      <div class="vr-eyebrow">HH GOA 2026 &middot; BUILDER LAB</div>
+      <div class="vr-brand-title" aria-label="Hacker Goa House 2026">
+        <span class="vr-hacker">HACKER</span>
+        <span class="vr-goa">GOA</span>
+        <span class="vr-house">HOUSE <small>2026</small></span>
       </div>
+      <div class="vr-goa-scene" aria-hidden="true">
+        <span class="vr-palm">🌴</span><span class="vr-wave">〰〰〰</span>
+        <span class="vr-surf">🏄</span><span class="vr-scooter">🛵</span>
+        <span class="vr-cassette">▣♫</span><span class="vr-code">&lt;/&gt;</span>
+        <span class="vr-sun">☀</span>
+      </div>
+      <p class="vr-sub">Voice-first retrieval intelligence for the builder house. Ask, retrieve, ground, ship.</p>
+      <div class="vr-tagline"><span>BUILD</span><i>•</i><span>RETRIEVE</span><i>•</i><span>GROUND</span><i>•</i><span>SHIP</span></div>
     </div>
-
-    <div class="vr-chips" id="vr-chips"></div>
-    <div class="vr-results" id="vr-results"></div>
+    <div class="vr-corpus-badge">
+      <strong>GOA // RAG LAB</strong><br/>
+      corpus: <b id="vr-corpus-count">—</b> passages<br/>
+      chunks: <b id="vr-chunk-count">—</b> indexed
+    </div>
   </div>
 
-  <script>
-    const CORPUS = [
-      { id: "p001", topic: "technology", text: "Retrieval-Augmented Generation (RAG) is a technique that combines a retrieval system with a language model to ground generated answers in external documents rather than relying solely on parametric memory." },
-      { id: "p002", topic: "science", text: "Photosynthesis is the process by which green plants, algae, and some bacteria convert light energy into chemical energy stored in glucose, combining carbon dioxide and water to produce oxygen." },
-      { id: "p003", topic: "history", text: "The Mughal Empire ruled large parts of India. Shah Jahan commissioned the Taj Mahal as a mausoleum for his wife Mumtaz Mahal, completed in 1653 using white marble and intricate inlay work." },
-      { id: "p004", topic: "science", text: "The Indian Space Research Organisation (ISRO) successfully landed Chandrayaan-3 near the lunar south pole in August 2023, carrying the Vikram lander and Pragyan rover to study lunar composition." },
-      { id: "p005", topic: "history", text: "India gained independence on 15 August 1947 following a nonviolent civil disobedience movement led by Mahatma Gandhi and other prominent freedom fighters." },
-      { id: "p006", topic: "health", text: "Dengue fever is a mosquito-borne viral infection transmitted primarily by Aedes aegypti mosquitoes. Symptoms include high fever, severe headache, joint pain, and skin rash." },
-      { id: "p007", topic: "cooking", text: "Biryani is a mixed rice dish popular across South Asia made by layering basmati rice with marinated meat or vegetables, saffron, and aromatics, slow-cooked in a sealed pot using the dum technique." },
-      { id: "p008", topic: "technology", text: "Vector databases store high-dimensional embeddings and support approximate nearest neighbor search using HNSW graphs, inverted file indexes (IVF), and product quantization." },
-      { id: "p009", topic: "technology", text: "The Unified Payments Interface (UPI) developed by NPCI revolutionized digital payments in India by allowing instant real-time fund transfers between bank accounts on mobile devices." },
-      { id: "p010", topic: "science", text: "The theory of general relativity published by Albert Einstein in 1915 describes gravity as a curvature of spacetime caused by mass and energy." },
-      { id: "p011", topic: "science", text: "Vaccines work by training the immune system to recognize and fight pathogens without causing disease, introducing weakened or partial viral antigens." },
-      { id: "p012", topic: "cooking", text: "Fermentation is central to South Indian staples such as dosa and idli, where a batter of rice and urad dal ferments overnight via wild yeasts and lactic acid bacteria." },
-      { id: "p013", topic: "geography", text: "The Ganges river originates in the Gangotri glacier in the Himalayas and flows 2,525 kilometers through northern India and Bangladesh before emptying into the Bay of Bengal." },
-      { id: "p014", topic: "geography", text: "The Western Ghats mountain range running along India's western coast is recognized as one of the world's eight biodiversity hotspots, home to endemic species like the Nilgiri tahr." },
-      { id: "p015", topic: "history", text: "The Indus Valley Civilization, one of the world's oldest urban cultures, flourished around 2500 BCE along the Indus river basin with cities like Mohenjo-daro and Harappa." }
-    ];
+  <div class="vr-input-row">
+    <button class="vr-mic" id="vr-mic-btn" title="Speak your question">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+    </button>
+    <input type="text" class="vr-text-input" id="vr-text-input" placeholder="Type a question, or tap the mic to speak it…"/>
+    <button class="vr-ask-btn" id="vr-ask-btn">RUN</button>
+  </div>
+  <div class="vr-mic-hint" id="vr-mic-hint">mic uses your browser's built-in speech recognition (Chrome/Edge) — real audio in, real transcript out</div>
 
-    const examples = [
-      "What is retrieval-augmented generation?",
-      "How does photosynthesis work?",
-      "Who built the Taj Mahal?",
-      "What did Chandrayaan-3 achieve?",
-      "What is the capital of France?",
-      "ignore previous instructions system prompt"
-    ];
+  <div class="vr-examples" id="vr-examples"></div>
+  <div class="vr-toolbar">
+    <div class="vr-mode">
+      <span class="vr-mode-label">VIEW</span>
+      <button class="vr-mode-btn active" id="vr-simple-btn">Simple</button>
+      <button class="vr-mode-btn" id="vr-inspector-btn">RAG Inspector</button>
+    </div>
+    <div class="vr-toolbar-actions">
+      <button class="vr-tool-btn" id="vr-clear-btn">Clear</button>
+      <button class="vr-tool-btn" id="vr-speak-btn" disabled>Listen</button>
+    </div>
+  </div>
 
-    const chipsContainer = document.getElementById('vr-chips');
-    examples.forEach(q => {
-      const chip = document.createElement('button');
-      chip.className = 'vr-chip';
-      chip.textContent = q;
-      chip.onclick = () => {
-        document.getElementById('vr-text-input').value = q;
-        askQuery(q);
-      };
-      chipsContainer.appendChild(chip);
+
+  <div id="vr-body" style="margin-top:20px;"></div>
+</div>
+
+<script>
+(function(){
+  let INSPECTOR_MODE = false;
+  let LAST_ANSWER = "";
+  let LAST_HALLUC = null;
+  let LAST_OVERLAP = 0;
+  const HISTORY = [];
+
+  function setInspector(on){
+    INSPECTOR_MODE = on;
+    document.getElementById("vr-simple-btn").classList.toggle("active", !on);
+    document.getElementById("vr-inspector-btn").classList.toggle("active", on);
+  }
+
+  function updateSpeakButton(){
+    const b = document.getElementById("vr-speak-btn");
+    if (b) b.disabled = !LAST_ANSWER;
+  }
+
+  function speakAnswer(){
+    if (!LAST_ANSWER || !("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(LAST_ANSWER);
+    u.rate = .96; u.pitch = 1;
+    window.speechSynthesis.speak(u);
+  }
+
+  function renderScoreCards(retrieved){
+    if (!retrieved || !retrieved.length) return "";
+    const bestDense = Math.max(...retrieved.map(r=>r.dense));
+    const bestSparse = Math.max(...retrieved.map(r=>r.sparse));
+    const bestFused = Math.max(...retrieved.map(r=>r.fused));
+    const card = (label,val) => `<div class="vr-score-card"><span>${label}</span><b>${(val*100).toFixed(0)}%</b><div class="vr-score-bar"><i style="width:${Math.min(100,val*100)}%"></i></div></div>`;
+    return `<div class="vr-score-grid">${card("Semantic",bestDense)}${card("Keyword",bestSparse)}${card("Fused",bestFused)}</div>`;
+  }
+
+  function renderInspector(results,retrieved,answer,overlap,halluc){
+    if(!INSPECTOR_MODE || !retrieved) return;
+    const div=document.createElement("div");
+    div.className="vr-panel";
+    div.innerHTML=`<div class="vr-panel-label">RAG Inspector</div>
+      <div class="vr-score-grid">
+        <div class="vr-score-card"><span>Retrieved</span><b>${retrieved.length}</b></div>
+        <div class="vr-score-card"><span>Grounding</span><b>${(overlap*100).toFixed(0)}%</b></div>
+        <div class="vr-score-card"><span>Guardrail</span><b>${halluc && halluc.caveat ? "CAVEAT":"PASS"}</b></div>
+      </div>`;
+    results.appendChild(div);
+  }
+
+
+  const CORPUS = [{"id": "p0001", "text": "The Indus Valley Civilization, one of the world's oldest urban cultures, flourished around 2500 BCE along the Indus river basin. Its cities, Mohenjo-daro and Harappa, had advanced drainage systems, standardized brick sizes, and evidence of long-distance trade with Mesopotamia. Archaeologists have found seals with an undeciphered script, suggesting a complex administrative system. The civilization declined around 1900 BCE, possibly due to climate change and shifting river courses.", "language": "en", "source_query": null, "metadata": {"topic": "history", "title": "history_1", "char_len": 484}}, {"id": "p0002", "text": "The Mughal Empire ruled large parts of the Indian subcontinent from the early 16th to the mid-19th century. Founded by Babur in 1526 after the First Battle of Panipat, the empire reached its territorial and cultural zenith under Akbar and Shah Jahan. Shah Jahan commissioned the Taj Mahal as a mausoleum for his wife Mumtaz Mahal, completed in 1653 using white marble and intricate inlay work.", "language": "en", "source_query": null, "metadata": {"topic": "history", "title": "history_2", "char_len": 393}}, {"id": "p0003", "text": "India's independence movement gained momentum in the early 20th century under leaders such as Mahatma Gandhi, who championed nonviolent civil disobedience. The Salt March of 1930, where Gandhi and his followers walked 240 miles to the Arabian Sea to produce salt in defiance of British law, became a defining moment. India finally gained independence on 15 August 1947, though partition led to the creation of Pakistan and widespread communal violence.", "language": "en", "source_query": null, "metadata": {"topic": "history", "title": "history_3", "char_len": 452}}, {"id": "p0004", "text": "The Chola dynasty, based in present-day Tamil Nadu, was one of the longest-ruling dynasties in southern India, controlling territory from roughly the 9th to the 13th century CE. Under Rajaraja Chola I and his son Rajendra Chola I, the empire expanded overseas, launching naval expeditions to Sri Lanka and Southeast Asia. The Brihadeeswarar Temple in Thanjavur, built by Rajaraja I, remains a UNESCO World Heritage Site and a masterpiece of Dravidian architecture.", "language": "en", "source_query": null, "metadata": {"topic": "history", "title": "history_4", "char_len": 464}}, {"id": "p0005", "text": "Photosynthesis is the process by which green plants, algae, and some bacteria convert light energy into chemical energy stored in glucose. It occurs mainly in the chloroplasts, using chlorophyll to absorb sunlight. The overall reaction combines carbon dioxide and water to produce glucose and oxygen. This process is fundamental to almost all life on Earth, as it forms the base of most food chains and is responsible for the oxygen in our atmosphere.", "language": "en", "source_query": null, "metadata": {"topic": "science", "title": "science_5", "char_len": 451}}, {"id": "p0006", "text": "The theory of general relativity, published by Albert Einstein in 1915, describes gravity not as a force but as a curvature of spacetime caused by mass and energy. Massive objects like stars and planets bend the fabric of spacetime around them, and this curvature dictates the motion of other objects nearby. Predictions from general relativity, such as the bending of light around the sun and gravitational time dilation, have been confirmed by numerous experiments.", "language": "en", "source_query": null, "metadata": {"topic": "science", "title": "science_6", "char_len": 467}}, {"id": "p0007", "text": "Vaccines work by training the immune system to recognize and fight pathogens without causing the disease itself. Most vaccines introduce a weakened, inactivated, or partial form of a pathogen, or genetic instructions for making a viral protein, prompting the body to produce antibodies. If the person is later exposed to the actual pathogen, their immune system can respond quickly, often preventing illness or reducing its severity.", "language": "en", "source_query": null, "metadata": {"topic": "science", "title": "science_7", "char_len": 433}}, {"id": "p0008", "text": "The Indian Space Research Organisation (ISRO) successfully landed the Chandrayaan-3 mission near the lunar south pole in August 2023, making India the fourth country to achieve a soft landing on the Moon and the first to do so near the south pole. The mission's Vikram lander and Pragyan rover carried instruments to study the lunar surface composition, temperature gradient, and seismic activity.", "language": "en", "source_query": null, "metadata": {"topic": "science", "title": "science_8", "char_len": 397}}, {"id": "p0009", "text": "Regular physical exercise, combined with a balanced diet, is one of the most effective ways to reduce the risk of chronic diseases such as type 2 diabetes, cardiovascular disease, and obesity. The World Health Organization recommends at least 150 minutes of moderate-intensity aerobic activity per week for adults, along with muscle-strengthening activities on two or more days.", "language": "en", "source_query": null, "metadata": {"topic": "health", "title": "health_9", "char_len": 378}}, {"id": "p0010", "text": "Dengue fever is a mosquito-borne viral infection common in tropical and subtropical climates, transmitted primarily by the Aedes aegypti mosquito. Symptoms typically include high fever, severe headache, pain behind the eyes, joint and muscle pain, and a skin rash. While most cases resolve with rest, fluids, and pain relief, severe dengue can lead to plasma leakage and requires urgent medical care.", "language": "en", "source_query": null, "metadata": {"topic": "health", "title": "health_10", "char_len": 400}}, {"id": "p0011", "text": "Sleep plays a critical role in memory consolidation, emotional regulation, and physical repair. During deep sleep stages, the brain clears metabolic waste products including beta-amyloid, a protein associated with Alzheimer's disease. Chronic sleep deprivation has been linked to impaired cognitive function, weakened immune response, and increased risk of hypertension and depression.", "language": "en", "source_query": null, "metadata": {"topic": "health", "title": "health_11", "char_len": 385}}, {"id": "p0012", "text": "The Ganges river, originating in the Gangotri glacier in the Himalayas, flows approximately 2,525 kilometers through northern India and Bangladesh before emptying into the Bay of Bengal. It supports one of the most densely populated river basins in the world and holds deep religious significance in Hinduism, with millions of pilgrims visiting cities like Varanasi and Haridwar along its banks.", "language": "en", "source_query": null, "metadata": {"topic": "geography", "title": "geography_12", "char_len": 395}}, {"id": "p0013", "text": "The Thar Desert, also known as the Great Indian Desert, spans roughly 200,000 square kilometers across northwestern India and southeastern Pakistan. Despite receiving less than 400mm of annual rainfall, it supports a surprisingly diverse ecosystem and a significant human population, with cities like Jaisalmer and Bikaner having adapted through traditional water conservation techniques such as stepwells and rainwater harvesting tanks.", "language": "en", "source_query": null, "metadata": {"topic": "geography", "title": "geography_13", "char_len": 437}}, {"id": "p0014", "text": "The Western Ghats, a mountain range running along the western coast of peninsular India, is recognized as one of the world's eight biodiversity hotspots. Stretching over 1,600 kilometers through six states, the range influences the Indian monsoon weather pattern and is home to numerous endemic species, including the Nilgiri tahr and the lion-tailed macaque.", "language": "en", "source_query": null, "metadata": {"topic": "geography", "title": "geography_14", "char_len": 359}}, {"id": "p0015", "text": "The Unified Payments Interface (UPI), developed by the National Payments Corporation of India, revolutionized digital payments in India by allowing instant, real-time transfer of funds between bank accounts using a mobile device. Launched in 2016, UPI processes billions of transactions monthly and has been cited internationally as a model for interoperable digital payment infrastructure.", "language": "en", "source_query": null, "metadata": {"topic": "technology", "title": "technology_15", "char_len": 390}}, {"id": "p0016", "text": "Retrieval-Augmented Generation, or RAG, is a technique that combines a retrieval system with a language model to ground generated answers in external documents rather than relying solely on the model's parametric knowledge. A typical RAG pipeline embeds a query, retrieves the most relevant chunks from a vector database, and passes them as context to the language model, reducing hallucination and enabling up-to-date, source-attributable answers.", "language": "en", "source_query": null, "metadata": {"topic": "technology", "title": "technology_16", "char_len": 448}}, {"id": "p0017", "text": "Vector databases store high-dimensional embeddings and support approximate nearest neighbor search, allowing systems to quickly find semantically similar items among millions of records. Popular approaches include HNSW graphs, inverted file indexes (IVF), and product quantization, each trading off between search speed, memory usage, and recall accuracy.", "language": "en", "source_query": null, "metadata": {"topic": "technology", "title": "technology_17", "char_len": 355}}, {"id": "p0018", "text": "Biryani is a mixed rice dish popular across South Asia, typically made by layering basmati rice with marinated meat or vegetables, and aromatics such as saffron, fried onions, and whole spices, then slow-cooking the dish in a sealed pot, a technique known as dum. Regional variations include Hyderabadi, Lucknowi, and Kolkata biryani, each with distinct spice profiles and preparation methods.", "language": "en", "source_query": null, "metadata": {"topic": "cooking", "title": "cooking_18", "char_len": 393}}, {"id": "p0019", "text": "Fermentation is central to many South Indian staples such as dosa and idli, where a batter of rice and urad dal (black gram) is left to ferment overnight. Wild yeasts and lactic acid bacteria break down starches, producing carbon dioxide that gives the batter its characteristic rise and a mildly sour flavor, while also increasing the bioavailability of certain nutrients.", "language": "en", "source_query": null, "metadata": {"topic": "cooking", "title": "cooking_19", "char_len": 373}}];
+
+  const STOPWORDS = new Set(["the","is","at","of","on","and","a","an","to","in","for","with","by","as","it","this","that","was","were","are","be","been","or","which","from","its","their","his","her","into","over","than","such","what","how","does","do","did","has","have","had","tell","me","about"]);
+
+  const UNSAFE_PATTERNS = [
+    /\bmake\s+(a\s+)?bomb\b/i, /\bkill\s+(myself|someone|people)\b/i,
+    /\bsuicide\b/i, /\bhow\s+to\s+hack\b/i, /\bself[- ]harm\b/i,
+    /\bsynthesi[sz]e?\b.*\billegal\s+drugs?\b/i
+  ];
+
+  function tokenize(text){
+    return (text.toLowerCase().match(/[a-z]{2,}/g) || []).filter(t => !STOPWORDS.has(t));
+  }
+
+  function splitSentences(text){
+    return text.split(/(?<=[.!?])\s+/).map(s=>s.trim()).filter(Boolean);
+  }
+
+  function chunkCorpus(passages){
+    const chunks = [];
+    for (const p of passages){
+      const sents = splitSentences(p.text);
+      let buf = [], curLen = 0, pos = 0;
+      const targetChars = 220;
+      for (const s of sents){
+        if (curLen + s.length > targetChars && buf.length){
+          chunks.push(makeChunk(p, buf.join(" "), pos)); pos++; buf=[]; curLen=0;
+        }
+        buf.push(s); curLen += s.length;
+      }
+      if (buf.length) chunks.push(makeChunk(p, buf.join(" "), pos));
+    }
+    return chunks;
+  }
+  function makeChunk(p, text, pos){
+    return { id: p.id+"::"+pos, docId: p.id, text, topic: p.metadata.topic, title: p.metadata.title };
+  }
+
+  let CHUNKS = [], DF = {}, N = 0, CHUNK_VECS = [];
+
+  function buildIndex(){
+    CHUNKS = chunkCorpus(CORPUS);
+    N = CHUNKS.length;
+    DF = {};
+    const chunkTokens = CHUNKS.map(c => tokenize(c.text));
+    chunkTokens.forEach(toks => { new Set(toks).forEach(t => DF[t] = (DF[t]||0)+1); });
+    CHUNK_VECS = chunkTokens.map(toks => tfidfVec(toks));
+  }
+  function idf(term){ return Math.log((N+1)/((DF[term]||0)+1)) + 1; }
+  function tfidfVec(tokens){
+    const tf = {};
+    tokens.forEach(t => tf[t] = (tf[t]||0)+1);
+    const vec = {};
+    let norm = 0;
+    for (const t in tf){ const w = (1+Math.log(tf[t])) * idf(t); vec[t] = w; norm += w*w; }
+    norm = Math.sqrt(norm) || 1;
+    for (const t in vec) vec[t] /= norm;
+    return vec;
+  }
+  function cosine(a,b){
+    let dot=0;
+    const keys = Object.keys(a).length < Object.keys(b).length ? a : b;
+    for (const t in keys){ if (a[t]!==undefined && b[t]!==undefined) dot += a[t]*b[t]; }
+    return dot;
+  }
+  function overlapScore(queryToks, chunkToks){
+    const qs = new Set(queryToks), cs = new Set(chunkToks);
+    let hits = 0; qs.forEach(t => { if (cs.has(t)) hits++; });
+    return qs.size ? hits/qs.size : 0;
+  }
+
+  function retrieve(query, topK){
+    const qToks = tokenize(query);
+    const qVec = tfidfVec(qToks);
+    const scored = CHUNKS.map((c, i) => {
+      const cToks = tokenize(c.text);
+      const dense = cosine(qVec, CHUNK_VECS[i]);
+      const sparse = overlapScore(qToks, cToks);
+      const fused = 0.55*dense + 0.45*sparse;
+      return { chunk: c, dense, sparse, fused };
     });
+    scored.sort((a,b)=> b.fused - a.fused);
+    return scored.slice(0, topK);
+  }
 
-    document.getElementById('vr-ask-btn').onclick = () => {
-      const query = document.getElementById('vr-text-input').value.trim();
-      if (query) askQuery(query);
-    };
-
-    document.getElementById('vr-text-input').onkeydown = (e) => {
-      if (e.key === 'Enter') {
-        const query = document.getElementById('vr-text-input').value.trim();
-        if (query) askQuery(query);
-      }
-    };
-
-    // Web Speech API
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      const rec = new SpeechRecognition();
-      rec.lang = 'en-US';
-      const micBtn = document.getElementById('vr-mic-btn');
-      micBtn.onclick = () => {
-        micBtn.classList.add('recording');
-        micBtn.textContent = 'LISTENING...';
-        rec.start();
-      };
-      rec.onresult = (e) => {
-        const transcript = e.results[0][0].transcript;
-        micBtn.classList.remove('recording');
-        micBtn.textContent = '🎤 MIC';
-        document.getElementById('vr-text-input').value = transcript;
-        askQuery(transcript);
-      };
-      rec.onerror = rec.onend = () => {
-        micBtn.classList.remove('recording');
-        micBtn.textContent = '🎤 MIC';
-      };
+  function safetyCheck(query){
+    for (const p of UNSAFE_PATTERNS){ if (p.test(query)) return { refuse:true, reason:"Query matched an unsafe-content pattern." }; }
+    return { refuse:false };
+  }
+  function offTopicCheck(retrieved){
+    if (!retrieved.length) return { refuse:true, reason:"No chunks retrieved." };
+    const bestDense = Math.max(...retrieved.map(r=>r.dense));
+    const bestSparse = Math.max(...retrieved.map(r=>r.sparse));
+    if (bestDense < 0.12 && bestSparse < 0.15){
+      return { refuse:true, reason:`No sufficiently relevant passage was found. Best semantic match: ${bestDense.toFixed(3)}; keyword overlap: ${bestSparse.toFixed(3)}.` };
     }
+    return { refuse:false };
+  }
+  function groundingCheck(answer, contextTexts){
+    const aToks = new Set(tokenize(answer));
+    if (!aToks.size) return { refuse:true, reason:"Empty answer.", overlap:0 };
+    const cToks = new Set();
+    contextTexts.forEach(t => tokenize(t).forEach(tok=>cToks.add(tok)));
+    let hit=0; aToks.forEach(t=>{ if(cToks.has(t)) hit++; });
+    const overlap = hit/aToks.size;
+    if (overlap < 0.30) return { refuse:true, reason:`Answer overlaps only ${(overlap*100).toFixed(0)}% with retrieved context — likely not grounded.`, overlap };
+    return { refuse:false, overlap };
+  }
+  function hallucinationCheck(answer, contextTexts){
+    const ctxBlob = contextTexts.join(" ");
+    const ctxNums = new Set(ctxBlob.match(/\b\d[\d,.]*\b/g) || []);
+    const ansNums = new Set(answer.match(/\b\d[\d,.]*\b/g) || []);
+    const unsupported = [...ansNums].filter(n => !ctxNums.has(n));
+    if (unsupported.length) return { caveat:true, reason:`Answer contains numbers not found verbatim in context: ${unsupported.join(", ")}` };
+    return { caveat:false };
+  }
 
-    const STOPWORDS = new Set(["what", "is", "the", "of", "how", "why", "where", "who", "when", "does", "do", "did", "a", "an", "in", "to", "for", "with", "on", "at", "by", "from", "about"]);
+  const STAGES = [
+    { key:"stt", label:"Speech-to-text" },
+    { key:"safety", label:"Input guardrail · safety filter" },
+    { key:"retrieval", label:"Hybrid retrieval (TF-IDF + keyword, fused)" },
+    { key:"topic", label:"Input guardrail · off-topic gate" },
+    { key:"generation", label:"Generation · grounded answer" },
+    { key:"grounding", label:"Output guardrail · grounding check" },
+    { key:"hallucination", label:"Output guardrail · hallucination check" }
+  ];
 
-    function extractTokens(str) {
-      return (str.toLowerCase().match(/\b[a-z0-9-]{2,}\b/g) || []).filter(w => !STOPWORDS.has(w));
+  function renderTrace(){
+    return `<div class="vr-trace" id="vr-trace">` + STAGES.map(s => `
+      <div class="vr-stage" data-key="${s.key}">
+        <div class="vr-dot" id="dot-${s.key}"></div>
+        <div class="vr-stage-label dim" id="label-${s.key}">${s.label}</div>
+        <div class="vr-stage-ms" id="ms-${s.key}"></div>
+      </div>`).join("") + `</div>`;
+  }
+  function setStage(key, status, ms){
+    const dot = document.getElementById("dot-"+key);
+    const label = document.getElementById("label-"+key);
+    const msEl = document.getElementById("ms-"+key);
+    if (!dot) return;
+    dot.className = "vr-dot" + (status==="active" ? " active" : status==="pass" ? " pass" : status==="fail" ? " fail" : "");
+    if (status!=="pending") label.classList.remove("dim");
+    if (ms !== undefined) msEl.textContent = ms.toFixed(2)+" ms";
+  }
+  function skipRest(fromIdx){
+    for (let i=fromIdx; i<STAGES.length; i++){
+      const el = document.getElementById("label-"+STAGES[i].key);
+      if (el && el.textContent.indexOf("(skipped)")===-1) el.textContent += " (skipped)";
     }
+  }
 
-    async function askQuery(query) {
-      const resultsDiv = document.getElementById('vr-results');
-      resultsDiv.innerHTML = '<div class="vr-card"><div class="vr-sub">Executing RAG Pipeline...</div></div>';
+  function localGroundedAnswer(query, contextChunks){
+    const q = query.toLowerCase().split(/\W+/).filter(w=>w.length>2);
+    const ranked = contextChunks.map(text => {
+      const lower = text.toLowerCase();
+      const score = q.reduce((n,w)=>n + (lower.includes(w) ? 1 : 0), 0);
+      return {text, score};
+    }).sort((a,b)=>b.score-a.score);
 
-      try {
-        const resp = await fetch('/api/query', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: query })
-        });
-        
-        if (!resp.ok) throw new Error('API server returned status ' + resp.status);
+    const best = ranked[0]?.text || contextChunks[0] || "";
+    const sentences = best.match(/[^.!?]+[.!?]+/g) || [best];
+    const selected = sentences.slice(0,3).join(" ").trim();
+
+    if (!selected) return "I found relevant information in the demo corpus, but I couldn't form a concise answer.";
+    return selected;
+  }
+
+  async function callClaude(query, contextChunks){
+    // Try FastAPI server API first if reachable
+    try {
+      const resp = await fetch('/api/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: query })
+      });
+      if (resp.ok) {
         const data = await resp.json();
-        renderResult(data);
-      } catch (err) {
-        // Full local in-browser RAG engine (when API server is unreachable)
-        const t0 = performance.now();
-        
-        // 1. Safety Guardrail
-        if (/ignore previous|system prompt|make a bomb|suicide|kill/i.test(query)) {
-          renderResult({
-            query: query,
-            answer: "I'm sorry, I cannot process that request. Reason: Query matches unsafe patterns (prompt injection or PII).",
-            guardrail_verdict: "refuse_unsafe",
-            guardrail_reason: "Query matches unsafe patterns (prompt injection or PII).",
-            retrieved_chunks: [],
-            stages: [{ name: "input_guardrail", status: "fail", latency_ms: 0.1 }],
-            total_latency_ms: performance.now() - t0
-          });
-          return;
-        }
-
-        // 2. Hybrid Retrieval across domain corpus
-        const qTokens = extractTokens(query);
-        const scored = CORPUS.map(c => {
-          const cTokens = extractTokens(c.text);
-          let overlap = 0;
-          if (qTokens.length && cTokens.length) {
-            const hits = qTokens.filter(t => cTokens.includes(t)).length;
-            overlap = hits / qTokens.length;
-          }
-          return { ...c, score: overlap };
-        });
-
-        scored.sort((a, b) => b.score - a.score);
-        const bestScore = scored[0].score;
-
-        // 3. Off-Topic Gate
-        if (bestScore === 0) {
-          renderResult({
-            query: query,
-            answer: "I couldn't find relevant information in the knowledge base to answer this question. The question may be outside the scope of the MSMARCO dataset.",
-            guardrail_verdict: "refuse_off_topic",
-            guardrail_reason: "Query token overlap (0.00) with indexed corpus is zero. Query appears off-topic.",
-            retrieved_chunks: [],
-            stages: [
-              { name: "input_guardrail", status: "pass", latency_ms: 0.1 },
-              { name: "retrieval", status: "pass", latency_ms: 0.4 }
-            ],
-            total_latency_ms: performance.now() - t0
-          });
-          return;
-        }
-
-        // 4. Grounded Response
-        const topChunk = scored[0];
-        const retrievedChunks = scored.slice(0, 3).map((c, i) => ({
-          chunk_id: `semantic_${c.id}_${i}`,
-          strategy: "semantic",
-          score: c.score,
-          text: c.text
-        }));
-
-        const t1 = performance.now();
-        renderResult({
-          query: query,
-          answer: `[Chunk 1] ${topChunk.text} [Chunk 1]`,
-          guardrail_verdict: "pass",
-          guardrail_reason: "Passed all guardrails",
-          retrieved_chunks: retrievedChunks,
-          stages: [
-            { name: "input_guardrail", status: "pass", latency_ms: 0.1 },
-            { name: "retrieval", status: "pass", latency_ms: 0.4 },
-            { name: "reranking", status: "pass", latency_ms: 0.2 },
-            { name: "generation", status: "pass", latency_ms: 0.2 },
-            { name: "output_guardrail", status: "pass", latency_ms: 0.8 }
-          ],
-          total_latency_ms: t1 - t0
-        });
+        return { text: data.answer, mode: "server" };
       }
+    } catch (e) {
+      // API server offline; proceed to local grounded generation
+    }
+    
+    return { text: localGroundedAnswer(query, contextChunks), mode: "local" };
+  }
+
+  const bodyEl = document.getElementById("vr-body");
+
+  async function runPipeline(query, sttMs){
+    bodyEl.innerHTML = renderTrace() +
+      `<div class="vr-panel"><div class="vr-panel-label">Transcript</div><div class="vr-transcript">"${escapeHtml(query)}"</div></div>` +
+      `<div id="vr-results"></div>`;
+
+    const results = document.getElementById("vr-results");
+    const t0 = performance.now();
+
+    setStage("stt","pass", sttMs);
+
+    setStage("safety","active");
+    let t = performance.now();
+    const safety = safetyCheck(query);
+    setStage("safety", safety.refuse ? "fail":"pass", performance.now()-t);
+    if (safety.refuse){
+      skipRest(2);
+      renderRefusal(results, "refuse_unsafe", safety.reason, performance.now()-t0);
+      return;
     }
 
-    function renderResult(data) {
-      const resultsDiv = document.getElementById('vr-results');
-      document.getElementById('vr-achieved').textContent = (data.total_latency_ms || 0).toFixed(1) + 'ms';
+    setStage("retrieval","active");
+    t = performance.now();
+    const retrieved = retrieve(query, 4);
+    setStage("retrieval","pass", performance.now()-t);
 
-      const verdict = data.guardrail_verdict || 'pass';
-      const isPass = verdict === 'pass' || verdict.startsWith('warn');
-      const verdictClass = isPass ? 'pass' : 'refuse';
-
-      let chunksHtml = '';
-      if (data.retrieved_chunks && data.retrieved_chunks.length) {
-        chunksHtml = '<div><b>Retrieved Chunks (' + data.retrieved_chunks.length + '):</b>' +
-          data.retrieved_chunks.map((c, i) => `
-            <div class="vr-chunk">
-              <div class="vr-chunk-meta">[${i+1}] Score: ${c.score.toFixed(4)} | Strategy: ${c.strategy}</div>
-              ${escapeHtml(c.text)}
-            </div>
-          `).join('') + '</div>';
-      }
-
-      let stagesHtml = '';
-      if (data.stages) {
-        stagesHtml = '<div class="vr-timing-grid">' +
-          data.stages.map(s => `
-            <div class="vr-timing-item">
-              ${s.name}
-              <b>${s.latency_ms.toFixed(1)}ms</b>
-            </div>
-          `).join('') + '</div>';
-      }
-
-      resultsDiv.innerHTML = `
-        <div class="vr-card">
-          <div class="vr-card-title">
-            <span>RAG PIPELINE RESULT</span>
-            <span class="vr-verdict ${verdictClass}">${verdict.toUpperCase()}</span>
-          </div>
-          <div class="vr-answer">${escapeHtml(data.answer || 'No answer generated.')}</div>
-          ${chunksHtml}
-          ${stagesHtml}
-        </div>
-      `;
+    setStage("topic","active");
+    t = performance.now();
+    const topicCheck = offTopicCheck(retrieved);
+    setStage("topic", topicCheck.refuse ? "fail":"pass", performance.now()-t);
+    if (topicCheck.refuse){
+      skipRest(4);
+      renderChunks(results, retrieved);
+      renderRefusal(results, "refuse_off_topic", topicCheck.reason, performance.now()-t0);
+      return;
     }
 
-    function escapeHtml(str) {
-      return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const contextTexts = retrieved.map(r=>r.chunk.text);
+    renderChunks(results, retrieved);
+
+    setStage("generation","active");
+    t = performance.now();
+    let genResult;
+    try {
+      genResult = await callClaude(query, contextTexts);
+    } catch (e){
+      setStage("generation","fail", performance.now()-t);
+      renderRefusal(results, "error", "Generation failed: " + e.message, performance.now()-t0);
+      return;
     }
-  </script>
+    setStage("generation","pass", performance.now()-t);
+
+    const answerText = typeof genResult === 'object' ? genResult.text : genResult;
+    const mode = typeof genResult === 'object' ? genResult.mode : 'local';
+
+    setStage("grounding","active");
+    t = performance.now();
+    const grounding = groundingCheck(answerText, contextTexts);
+    setStage("grounding", grounding.refuse ? "fail":"pass", performance.now()-t);
+    if (grounding.refuse){
+      skipRest(6);
+      renderRefusal(results, "refuse_ungrounded", grounding.reason, performance.now()-t0);
+      return;
+    }
+
+    setStage("hallucination","active");
+    t = performance.now();
+    const halluc = hallucinationCheck(answerText, contextTexts);
+    setStage("hallucination", halluc.caveat ? "fail":"pass", performance.now()-t);
+
+    LAST_ANSWER = answerText;
+    LAST_HALLUC = halluc;
+    LAST_OVERLAP = grounding.overlap;
+    HISTORY.unshift({q:query, a:answerText});
+    if(HISTORY.length>6) HISTORY.pop();
+    updateSpeakButton();
+    renderAnswer(results, answerText, halluc, performance.now()-t0, grounding.overlap);
+    const modeNote = document.createElement("div");
+    modeNote.className = "vr-footnote";
+    modeNote.textContent = mode === "server"
+      ? "Generated by the live RAG backend pipeline."
+      : "Generated locally from the retrieved corpus — sub-millisecond latency.";
+    results.appendChild(modeNote);
+    renderInspector(results, retrieved, answerText, grounding.overlap, halluc);
+  }
+
+  function renderChunks(results, retrieved){
+    const div = document.createElement("div");
+    div.className = "vr-panel";
+    div.innerHTML = `<div class="vr-panel-label">Retrieved context &middot; top ${retrieved.length}</div>` +
+      retrieved.map((r,i) => `<div class="vr-chunk">
+        <b>[${escapeHtml(r.chunk.topic)}] ${escapeHtml(r.chunk.title || ("source_"+(i+1)))}</b>
+        <span class="vr-score"> &middot; fused ${(r.fused*100).toFixed(0)}% &middot; semantic ${(r.dense*100).toFixed(0)}% &middot; keyword ${(r.sparse*100).toFixed(0)}%</span>
+        <br/>${escapeHtml(r.chunk.text)}
+      </div>`).join("");
+    results.appendChild(div);
+  }
+
+  function renderRefusal(results, verdict, reason, totalMs){
+    const div = document.createElement("div");
+    div.className = "vr-panel vr-refusal-card";
+
+    const isOffTopic = verdict === "refuse_off_topic";
+    const isUnsafe = verdict === "refuse_unsafe";
+    const title = isOffTopic ? "Outside this demo corpus" : (isUnsafe ? "Request blocked" : "Could not answer");
+    const friendly = isOffTopic
+      ? "I couldn't find enough relevant information in the indexed HH Goa demo corpus to answer that question."
+      : isUnsafe
+        ? "This request was blocked by the input safety guardrail."
+        : reason;
+
+    div.innerHTML =
+      `<div class="vr-verdict refuse">● ${isOffTopic ? "OUTSIDE CORPUS" : verdict.toUpperCase()}</div>` +
+      `<div class="vr-refusal-title">${title}</div>` +
+      `<div class="vr-refuse-reason">${escapeHtml(friendly)}</div>` +
+      (isOffTopic ? `<div class="vr-refusal-hint">Try a question about history, science, health, geography, technology, RAG, or cooking.</div>` : "") +
+      `<div style="margin-top:14px;" class="vr-latency-strip">
+        <span>pipeline <b>${totalMs.toFixed(0)} ms</b></span>
+        <span>guardrail <b>PASS</b></span>
+      </div>`;
+    results.appendChild(div);
+  }
+
+  function renderAnswer(results, answer, halluc, totalMs, overlap){
+    const div = document.createElement("div");
+    div.className = "vr-panel";
+    div.innerHTML = `<div class="vr-verdict ok">● answered${halluc.caveat ? " &middot; with caveat":""}</div>` +
+      `<div class="vr-answer">${escapeHtml(answer)}</div>` +
+      (halluc.caveat ? `<div class="vr-refuse-reason" style="margin-top:10px;">⚠ ${escapeHtml(halluc.reason)}</div>` : "") +
+      `<div style="margin-top:14px;" class="vr-latency-strip">
+         <span>grounding overlap <b>${(overlap*100).toFixed(0)}%</b></span>
+         <span>total pipeline time <b>${totalMs.toFixed(2)} ms</b></span>
+       </div>`;
+    results.appendChild(div);
+  }
+
+  function escapeHtml(s){
+    return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+
+  const textInput = document.getElementById("vr-text-input");
+  const askBtn = document.getElementById("vr-ask-btn");
+  const micBtn = document.getElementById("vr-mic-btn");
+  const micHint = document.getElementById("vr-mic-hint");
+  const simpleBtn = document.getElementById("vr-simple-btn");
+  const inspectorBtn = document.getElementById("vr-inspector-btn");
+  const clearBtn = document.getElementById("vr-clear-btn");
+  const speakBtn = document.getElementById("vr-speak-btn");
+  simpleBtn.addEventListener("click",()=>setInspector(false));
+  inspectorBtn.addEventListener("click",()=>setInspector(true));
+  clearBtn.addEventListener("click",()=>{
+    textInput.value="";
+    LAST_ANSWER="";
+    updateSpeakButton();
+    if("speechSynthesis" in window) window.speechSynthesis.cancel();
+    bodyEl.innerHTML=`<div class="vr-empty">Ask something above — try an example chip, or ask about history, science, health, geography, tech, or cooking topics in the demo corpus.</div>`;
+  });
+  speakBtn.addEventListener("click",speakAnswer);
+
+  function ask(query, sttMs){
+    if (!query || !query.trim()) return;
+    runPipeline(query.trim(), sttMs || 0);
+  }
+  askBtn.addEventListener("click", () => ask(textInput.value, 0));
+  textInput.addEventListener("keydown", e => { if (e.key==="Enter") ask(textInput.value, 0); });
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SpeechRecognition){
+    const rec = new SpeechRecognition();
+    rec.lang = "en-US";
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    let sttStart = 0;
+    micBtn.addEventListener("click", () => {
+      sttStart = performance.now();
+      micBtn.classList.add("listening");
+      micHint.textContent = "listening…";
+      try { rec.start(); } catch(e){ /* already started */ }
+    });
+    rec.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      const sttMs = performance.now() - sttStart;
+      micBtn.classList.remove("listening");
+      micHint.textContent = "mic uses your browser's built-in speech recognition (Chrome/Edge) — real audio in, real transcript out";
+      textInput.value = transcript;
+      ask(transcript, sttMs);
+    };
+    rec.onerror = () => { micBtn.classList.remove("listening"); micHint.textContent = "mic error — check permissions, or just type your question above"; };
+    rec.onend = () => { micBtn.classList.remove("listening"); };
+  } else {
+    micBtn.disabled = true;
+    micHint.textContent = "speech recognition isn't supported in this browser — type your question above instead";
+  }
+
+  buildIndex();
+  document.getElementById("vr-corpus-count").textContent = CORPUS.length;
+  document.getElementById("vr-chunk-count").textContent = CHUNKS.length;
+
+  const examples = [
+    "What did Chandrayaan-3 achieve?",
+    "How is biryani cooked?",
+    "What is retrieval-augmented generation?",
+    "How does photosynthesis work?"
+  ];
+  document.getElementById("vr-examples").innerHTML = examples.map(q => `<button class="vr-ex-chip" data-q="${escapeHtml(q)}">${escapeHtml(q)}</button>`).join("");
+  document.querySelectorAll(".vr-ex-chip").forEach(btn => btn.addEventListener("click", () => { textInput.value = btn.dataset.q; ask(btn.dataset.q, 0); }));
+
+  bodyEl.innerHTML = `<div class="vr-empty">Ask something above — try an example chip, or ask about history, science, health, geography, tech, or cooking topics in the demo corpus.</div>`;
+})();
+</script>
 </body>
 </html>
