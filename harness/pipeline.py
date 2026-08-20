@@ -6,6 +6,7 @@ import logging
 import asyncio
 import os
 import json
+import re
 
 import requests as req_lib
 
@@ -206,8 +207,8 @@ class RAGPipelineHarness:
 
             # ── Stage 2b: Off-topic check using token overlap & relevance ──
             def _query_tokens(t: str) -> set:
-                stopwords = {"what", "is", "the", "of", "how", "why", "where", "who", "when", "does", "do", "a", "an", "in", "to", "for"}
-                words = set(t.lower().replace('?', '').split())
+                stopwords = {"what", "is", "the", "of", "how", "why", "where", "who", "when", "does", "do", "did", "a", "an", "in", "to", "for", "with", "on", "at", "by", "from", "about"}
+                words = set(re.findall(r'\b[a-z0-9]{2,}\b', t.lower()))
                 return words - stopwords
 
             q_toks = _query_tokens(result.query)
